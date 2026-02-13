@@ -52,12 +52,15 @@
 ## 📋 Next Steps (Phase 2-4)
 
 ### Multi-Image Upload & Batch Processing
-- [ ] Multi-file drag & drop UI
-- [ ] Image gallery component
-- [ ] Batch processing queue UI
-- [ ] Progress tracking with WebSocket
-- [ ] Bulk download (zip)
+- ✅ Multi-file drag & drop UI
+- ✅ Image gallery component with selection
+- ✅ Batch processing modal
+- ✅ Progress tracking UI
+- ✅ Status badges (pending, processing, completed, error)
+- ✅ Gallery toggle and selection controls
 - [ ] Backend batch processing worker
+- [ ] Bulk download (zip)
+- [ ] WebSocket real-time progress updates
 
 ### Chatbot Interface
 - [ ] Chat panel component
