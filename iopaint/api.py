@@ -46,6 +46,8 @@ from iopaint.model_manager import ModelManager
 from iopaint.plugins import build_plugins, RealESRGANUpscaler, InteractiveSeg
 from iopaint.plugins.base_plugin import BasePlugin
 from iopaint.plugins.remove_bg import RemoveBG
+from iopaint.api_auth import router as auth_router
+from iopaint.supabase_client import is_supabase_enabled
 from iopaint.schema import (
     GenInfoResponse,
     ApiConfig,

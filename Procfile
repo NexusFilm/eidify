@@ -1,0 +1,1 @@
+web: python -m iopaint start --host 0.0.0.0 --port $PORT --model lama --device cpu --no-half

@@ -1,0 +1,16 @@
+# Don't upload these to Railway
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.kiro/
+node_modules/
+.env
+.DS_Store
+*.jpg
+*.png
+*.jpeg
+assets/
+web_app/node_modules/
+web_app/dist/

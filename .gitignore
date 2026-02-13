@@ -8,5 +8,24 @@ build
 dist/
 IOPaint.egg-info/
 venv/
+.venv/
 tmp/
 iopaint/web_app/
+
+# Environment variables
+.env
+.env.local
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# macOS resource forks
+._*
+
+# Node modules
+node_modules/
+web_app/node_modules/
+
+# Build outputs
+web_app/dist/
