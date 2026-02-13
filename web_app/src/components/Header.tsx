@@ -1,12 +1,14 @@
 import { PlayIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { IconButton, ImageUploadButton } from "@/components/ui/button"
 import Shortcuts from "@/components/Shortcuts"
 import { useImage } from "@/hooks/useImage"
+import AuthModal from "@/components/AuthModal"
+import { getCurrentUser, signOut, isSupabaseEnabled } from "@/lib/supabase"
 
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import PromptInput from "./PromptInput"
-import { RotateCw, Image, Upload } from "lucide-react"
+import { RotateCw, Image, Upload, User, LogOut } from "lucide-react"
 import FileManager, { MASK_TAB } from "./FileManager"
 import { getMediaBlob, getMediaFile } from "@/lib/api"
 import { useStore } from "@/lib/states"
@@ -53,6 +55,30 @@ const Header = () => {
   const { toast } = useToast()
   const [maskImage, maskImageLoaded] = useImage(customMask)
   const [openMaskPopover, setOpenMaskPopover] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    if (isSupabaseEnabled()) {
+      getCurrentUser().then(setUser)
+    }
+  }, [])
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      setUser(null)
+      toast({
+        title: "Signed out",
+        description: "You've been successfully signed out.",
+      })
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        description: error.message,
+      })
+    }
+  }
 
   const handleRerunLastMask = () => {
     runInpainting()
@@ -86,22 +112,31 @@ const Header = () => {
 
   return (
     <header className="h-[60px] px-6 py-4 absolute top-[0] flex justify-between items-center w-full z-20 border-b backdrop-filter backdrop-blur-md bg-background/70">
-      <div className="flex items-center gap-1">
-        {serverConfig.enableFileManager ? (
-          <FileManager photoWidth={512} onPhotoClick={handleOnPhotoClick} />
-        ) : (
-          <></>
-        )}
+      <div className="flex items-center gap-4">
+        {/* Logo/Brand */}
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+            <span className="text-white font-bold text-lg">E</span>
+          </div>
+          <span className="font-semibold text-lg hidden sm:inline">Eidify</span>
+        </div>
 
-        <ImageUploadButton
-          disabled={isInpainting}
-          tooltip="Upload image"
-          onFileUpload={(file) => {
-            setFile(file)
-          }}
-        >
-          <Image />
-        </ImageUploadButton>
+        <div className="flex items-center gap-1">
+          {serverConfig.enableFileManager ? (
+            <FileManager photoWidth={512} onPhotoClick={handleOnPhotoClick} />
+          ) : (
+            <></>
+          )}
+
+          <ImageUploadButton
+            disabled={isInpainting}
+            tooltip="Upload image"
+            onFileUpload={(file) => {
+              setFile(file)
+            }}
+          >
+            <Image />
+          </ImageUploadButton>
 
         <div
           className={cn([
@@ -192,11 +227,48 @@ const Header = () => {
 
       {model.need_prompt ? <PromptInput /> : <></>}
 
-      <div className="flex gap-1">
+      <div className="flex gap-1 items-center">
+        {isSupabaseEnabled() && (
+          <>
+            {user ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <IconButton tooltip="Account">
+                    <User />
+                  </IconButton>
+                </PopoverTrigger>
+                <PopoverContent className="w-56">
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium">{user.email}</div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <IconButton tooltip="Sign In" onClick={() => setAuthModalOpen(true)}>
+                <User />
+              </IconButton>
+            )}
+          </>
+        )}
         <Coffee />
         <Shortcuts />
         {serverConfig.disableModelSwitch ? <></> : <SettingsDialog />}
       </div>
+
+      <AuthModal
+        open={authModalOpen}
+        onOpenChange={setAuthModalOpen}
+        onSuccess={() => getCurrentUser().then(setUser)}
+      />
     </header>
   )
 }
