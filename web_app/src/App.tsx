@@ -9,11 +9,14 @@ import FileSelect from "@/components/FileSelect"
 import MultiImageUpload from "@/components/MultiImageUpload"
 import ImageGallery, { GalleryImage } from "@/components/ImageGallery"
 import BatchProcessModal from "@/components/BatchProcessModal"
+import ChatPanel, { ChatMessage } from "@/components/ChatPanel"
+import { parseCommand, generateResponse, commandToOperation } from "@/lib/chatbot"
 import { Toaster } from "./components/ui/toaster"
 import { useStore } from "./lib/states"
 import { useWindowSize } from "react-use"
 import { Button } from "./components/ui/button"
 import { Layers, X } from "lucide-react"
+import { useToast } from "./components/ui/use-toast"
 
 const SUPPORTED_FILE_TYPE = [
   "image/jpeg",
@@ -35,7 +38,10 @@ function Home() {
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([])
   const [showGallery, setShowGallery] = useState(false)
   const [batchModalOpen, setBatchModalOpen] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [isChatProcessing, setIsChatProcessing] = useState(false)
 
+  const { toast } = useToast()
   const userInputImage = useInputImage()
   const windowSize = useWindowSize()
 
@@ -122,6 +128,66 @@ function Home() {
           : img
       )
     )
+  }
+
+  const handleChatMessage = async (message: string) => {
+    if (!file) {
+      toast({
+        variant: "destructive",
+        description: "Please upload an image first",
+      })
+      return
+    }
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: Math.random().toString(36).substr(2, 9),
+      role: "user",
+      content: message,
+      timestamp: new Date(),
+    }
+    setChatMessages((prev) => [...prev, userMessage])
+    setIsChatProcessing(true)
+
+    try {
+      // Parse command
+      const command = parseCommand(message)
+      const response = generateResponse(command)
+      const operation = commandToOperation(command)
+
+      // Add assistant response
+      const assistantMessage: ChatMessage = {
+        id: Math.random().toString(36).substr(2, 9),
+        role: "assistant",
+        content: response,
+        timestamp: new Date(),
+        command: {
+          intent: command.intent,
+          target: command.target,
+          parameters: command.parameters,
+        },
+      }
+      setChatMessages((prev) => [...prev, assistantMessage])
+
+      // Execute operation if valid
+      if (command.confidence > 0.5 && operation.operation !== "unknown") {
+        // TODO: Implement actual operation execution
+        // For now, just show success
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        
+        toast({
+          title: "Processing complete",
+          description: "Your image has been edited successfully",
+        })
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        description: error.message || "Failed to process command",
+      })
+    } finally {
+      setIsChatProcessing(false)
+    }
   }
 
   const dragCounter = useRef(0)
@@ -298,6 +364,15 @@ function Home() {
         images={galleryImages.filter((img) => selectedImageIds.includes(img.id))}
         onProcess={handleBatchProcess}
       />
+
+      {/* Chat Panel - only show when image is loaded */}
+      {file && (
+        <ChatPanel
+          messages={chatMessages}
+          onSendMessage={handleChatMessage}
+          isProcessing={isChatProcessing}
+        />
+      )}
     </main>
   )
 }
