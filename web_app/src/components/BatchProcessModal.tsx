@@ -4,7 +4,7 @@ import { Button } from "./ui/button"
 import { Label } from "./ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { Progress } from "./ui/progress"
-import { Loader2, Download } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { GalleryImage } from "./ImageGallery"
 
 interface BatchProcessModalProps {
@@ -56,7 +56,6 @@ export default function BatchProcessModal({
     }
   }
 
-  const processingCount = images.filter((img) => img.status === "processing").length
   const completedCount = images.filter((img) => img.status === "completed").length
   const totalCount = images.length
 

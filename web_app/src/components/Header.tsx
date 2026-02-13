@@ -1,6 +1,6 @@
 import { PlayIcon } from "@radix-ui/react-icons"
 import { useState, useEffect } from "react"
-import { IconButton, ImageUploadButton } from "@/components/ui/button"
+import { IconButton, ImageUploadButton, Button } from "@/components/ui/button"
 import Shortcuts from "@/components/Shortcuts"
 import { useImage } from "@/hooks/useImage"
 import AuthModal from "@/components/AuthModal"
@@ -138,12 +138,12 @@ const Header = () => {
             <Image />
           </ImageUploadButton>
 
-        <div
-          className={cn([
-            "flex items-center gap-1",
-            file && enableUploadMask ? "visible" : "hidden",
-          ])}
-        >
+          <div
+            className={cn([
+              "flex items-center gap-1",
+              file && enableUploadMask ? "visible" : "hidden",
+            ])}
+          >
           <ImageUploadButton
             disabled={isInpainting}
             tooltip="Upload custom mask"
@@ -208,9 +208,9 @@ const Header = () => {
           ) : (
             <></>
           )}
-        </div>
+          </div>
 
-        {file && !model.need_prompt ? (
+          {file && !model.need_prompt ? (
           <IconButton
             disabled={isInpainting}
             tooltip="Rerun previous mask"
@@ -223,6 +223,8 @@ const Header = () => {
         ) : (
           <></>
         )}
+        </div>
+
       </div>
 
       {model.need_prompt ? <PromptInput /> : <></>}

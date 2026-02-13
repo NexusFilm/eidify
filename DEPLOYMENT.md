@@ -7,6 +7,12 @@
 
 ## Railway Deployment
 
+### Important Notes
+
+- The backend uses `opencv-python-headless` for headless server environments
+- First deployment takes 5-10 minutes (downloading AI models ~500MB)
+- Railway Hobby plan provides 8GB RAM, sufficient for LaMa model on CPU
+
 ### 1. Get Supabase Credentials
 
 Go to your Supabase project dashboard:
@@ -63,6 +69,56 @@ Save this - you'll need it for the frontend.
 
 ## Frontend Deployment (Vercel)
 
+### Important: Deploy Frontend Only
+
+The backend (Python/FastAPI) is deployed on Railway. Vercel should only deploy the React frontend from the `web_app` directory.
+
+### Option 1: Deploy via Vercel Dashboard (Recommended)
+
+1. Go to https://vercel.com/new
+2. Import `NexusFilm/eidify` repository
+3. **CRITICAL**: Set "Root Directory" to `web_app`
+4. Framework Preset: Vite (auto-detected)
+5. Add environment variables:
+   - `VITE_BACKEND`: Your Railway URL (e.g., https://web-production-66480.up.railway.app)
+   - `VITE_SUPABASE_URL`: https://ozzjcuamqslxjcfgtfhj.supabase.co
+   - `VITE_SUPABASE_ANON_KEY`: Get from Supabase dashboard → Settings → API
+6. Click "Deploy"
+
+### Option 2: Deploy via CLI
+
+```bash
+cd web_app
+
+# Create .env file
+cat > .env << EOF
+VITE_BACKEND=https://web-production-66480.up.railway.app
+VITE_SUPABASE_URL=https://ozzjcuamqslxjcfgtfhj.supabase.co
+VITE_SUPABASE_ANON_KEY=<your-anon-key>
+EOF
+
+# Deploy
+npx vercel --prod
+```
+
+When prompted:
+- Set up and deploy? Yes
+- Which scope? Your account
+- Link to existing project? No
+- Project name? eidify (or your choice)
+- Directory? ./ (already in web_app)
+- Override settings? No
+
+### Verify Deployment
+
+After deployment, visit your Vercel URL and:
+1. Check that the Eidify interface loads
+2. Try uploading an image
+3. Verify backend connection (check browser console for errors)
+4. Test authentication (sign up/login)
+
+## Frontend Deployment (Vercel)
+
 ### 1. Build the Frontend
 
 ```bash
@@ -73,17 +129,25 @@ npm run build
 
 ### 2. Deploy to Vercel
 
+**Via Dashboard (Recommended)**:
+1. Go to https://vercel.com/new
+2. Import `NexusFilm/eidify`
+3. Set root directory to `web_app`
+4. Add environment variables (see below)
+5. Deploy
+
+**Via CLI**:
 ```bash
 cd web_app
 npx vercel --prod
 ```
 
-Or connect via Vercel dashboard:
-1. Go to https://vercel.com/new
-2. Import `NexusFilm/eidify`
-3. Set root directory to `web_app`
-4. Add environment variable:
-   - `VITE_BACKEND`: Your Railway URL (e.g., https://eidify-production.up.railway.app)
+### 3. Environment Variables
+
+Add these in Vercel dashboard or when prompted by CLI:
+- `VITE_BACKEND`: https://web-production-66480.up.railway.app
+- `VITE_SUPABASE_URL`: https://ozzjcuamqslxjcfgtfhj.supabase.co
+- `VITE_SUPABASE_ANON_KEY`: <from-supabase-dashboard>
 
 ## Cost Estimate
 

@@ -106,7 +106,7 @@ function Home() {
     })
   }, [])
 
-  const handleBatchProcess = async (operation: string, params: any) => {
+  const handleBatchProcess = async (_operation: string, _params: any) => {
     // Update selected images to processing
     setGalleryImages((prev) =>
       prev.map((img) =>

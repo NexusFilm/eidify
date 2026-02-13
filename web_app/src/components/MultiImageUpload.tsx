@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { Upload, X } from "lucide-react"
+import { Upload } from "lucide-react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 import { useToast } from "./ui/use-toast"

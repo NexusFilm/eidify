@@ -172,7 +172,7 @@ export function commandToOperation(command: ParsedCommand): {
       }
 
     case "enhance":
-      if (command.parameters?.value?.includes("2x") || command.parameters?.value?.includes("2")) {
+      if (typeof command.parameters?.value === "string" && (command.parameters.value.includes("2x") || command.parameters.value.includes("2"))) {
         return { operation: "upscale", params: { scale: 2 } }
       }
       return { operation: "enhance", params: {} }

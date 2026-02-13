@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { X, Download, Trash2, CheckCircle2 } from "lucide-react"
+import { Download, Trash2, CheckCircle2 } from "lucide-react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 

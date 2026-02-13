@@ -47,7 +47,10 @@
 - ✅ GitHub repository (NexusFilm/eidify)
 - ✅ Environment variable setup
 - ✅ Deployment documentation
-- 🔄 Railway build in progress (backend deploying)
+- ✅ Backend deployed to Railway (https://web-production-66480.up.railway.app)
+- ✅ Frontend build fixed (TypeScript errors resolved)
+- ✅ Vercel configuration (`web_app/vercel.json`)
+- 🔄 Frontend deployment to Vercel (ready to deploy)
 
 ## 📋 Next Steps (Phase 2-4)
 
@@ -129,15 +132,16 @@
 ## 🚀 Deployment Status
 
 ### Backend (Railway)
-- Status: 🔄 Building
-- URL: Will be available after build completes
-- Build time: ~10-15 minutes (first deploy)
+- Status: ✅ Deployed
+- URL: https://web-production-66480.up.railway.app
 - Models: LaMa (CPU mode)
+- API: Working
 
 ### Frontend (Vercel)
-- Status: ⏳ Not deployed yet
-- Next: Deploy after backend is live
-- Build time: ~2 minutes
+- Status: 🔄 Ready to Deploy
+- Build: ✅ Passing
+- Next: Deploy via Vercel dashboard or CLI
+- Instructions: See QUICKSTART.md
 
 ### Database (Supabase)
 - Status: ✅ Live

@@ -20,6 +20,23 @@ You should see JSON with model information. If you see this, backend is working!
 
 ### Step 3: Deploy Frontend to Vercel
 
+**Method 1: Vercel Dashboard (Easiest)**
+
+1. Go to https://vercel.com/new
+2. Click "Import Git Repository"
+3. Select `NexusFilm/eidify`
+4. **IMPORTANT**: Click "Edit" next to "Root Directory"
+5. Set Root Directory to: `web_app`
+6. Click "Environment Variables"
+7. Add these three variables:
+   - `VITE_BACKEND` = `https://web-production-66480.up.railway.app`
+   - `VITE_SUPABASE_URL` = `https://ozzjcuamqslxjcfgtfhj.supabase.co`
+   - `VITE_SUPABASE_ANON_KEY` = Get from [Supabase Dashboard](https://supabase.com/dashboard/project/ozzjcuamqslxjcfgtfhj/settings/api)
+8. Click "Deploy"
+9. Wait ~2 minutes
+
+**Method 2: CLI**
+
 ```bash
 cd web_app
 npm install
@@ -27,7 +44,7 @@ npm install
 
 Create `web_app/.env`:
 ```bash
-VITE_BACKEND=https://your-railway-url.up.railway.app
+VITE_BACKEND=https://web-production-66480.up.railway.app
 VITE_SUPABASE_URL=https://ozzjcuamqslxjcfgtfhj.supabase.co
 VITE_SUPABASE_ANON_KEY=<your-anon-key-from-supabase>
 ```
@@ -37,10 +54,7 @@ Deploy:
 npx vercel --prod
 ```
 
-Follow prompts:
-- Set root directory: `web_app`
-- Add environment variables when prompted
-- Wait for deployment (~2 minutes)
+Follow prompts and confirm settings.
 
 ### Step 4: Test the App
 
