@@ -359,6 +359,10 @@ class Api:
 
     def launch(self):
         self.app.include_router(self.router)
+        # Include auth router if Supabase is enabled
+        if is_supabase_enabled():
+            self.app.include_router(auth_router)
+            logger.info("Auth endpoints enabled")
         uvicorn.run(
             self.combined_asgi_app,
             host=self.config.host,
